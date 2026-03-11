@@ -14,6 +14,8 @@ O sistema utiliza uma combinação de ferramentas:
 # 📦 Requisitos
 
 Antes de executar o projeto, instale os seguintes softwares.
+(Verifique se existe o compilador de Java no computador, caso contrario, o Javac nao vai compilar o projeto).
+
 
 ## 1️⃣ Python
 
