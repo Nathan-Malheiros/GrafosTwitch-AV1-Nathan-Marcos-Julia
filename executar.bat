@@ -42,14 +42,14 @@ echo  SISTEMA DE PROCESSAMENTO DE GRAFOS
 echo ===============================================
 echo.
 
-echo [1/4] Limpando arquivos anteriores...
+echo [1/5] Limpando arquivos anteriores...
 echo -----------------------------------------------
 if exist "%ALGS4_DIR%\build" rmdir /s /q "%ALGS4_DIR%\build" >nul 2>&1
 if exist "%PROJECT_DIR%graphs\*.dot" del "%PROJECT_DIR%graphs\*.dot" 2>nul
 echo [OK] Limpeza concluida!
 echo.
 
-echo [2/4] Formatando CSV de entrada...
+echo [2/5] Formatando CSV de entrada...
 echo -----------------------------------------------
 
 REM Lógica Robusta para encontrar o Python Real
@@ -93,7 +93,27 @@ if errorlevel 1 (
 echo [OK] CSV formatado com sucesso.
 echo.
 
-echo [3/4] Compilando codigo Java...
+echo [3/5] Verificando dependencias Python...
+set PACKAGES=matplotlib numpy powerlaw networkx pydot
+for %%p in (%PACKAGES%) do (
+    echo Verificando %%p...
+    !PYEXEC! -m pip show %%p >nul 2>&1
+    if !errorlevel! neq 0 (
+        echo Instalando %%p...
+        !PYEXEC! -m pip install %%p
+        if !errorlevel! neq 0 (
+            echo [ERRO] Falha ao instalar %%p
+            pause
+            exit /b 1
+        )
+    ) else (
+        echo %%p ja instalado.
+    )
+)
+echo [OK] Dependencias verificadas.
+echo.
+
+echo [4/5] Compilando codigo Java...
 echo -----------------------------------------------
 REM Define o caminho raiz do código (onde começa o pacote edu/...)
 set "JAVA_ROOT=%PROJECT_DIR%algs4\src\main\java"
@@ -119,7 +139,7 @@ cd /d "%PROJECT_DIR%"
 echo [OK] Compilacao concluida!
 echo.
 
-echo [4/4] Executando aplicacao e gerando saidas...
+echo [5/5] Executando aplicacao e gerando saidas...
 echo -----------------------------------------------
 
 REM O CP deve apontar para a RAIZ do código (antes do edu/...)
